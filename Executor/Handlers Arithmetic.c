@@ -1,13 +1,17 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Arithmetics
+
 Abstract:
     
 Author:
     JulesIMF
+
 Last Edit:
     18.10.2020 22:20
+
 Edit Notes:
 
 */

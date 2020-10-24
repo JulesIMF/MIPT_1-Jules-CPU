@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Execution (auxiliary).с
+
 Abstract:
     Реализует вспомогательный интерфейс исполнения
+
 Author:
     JulesIMF
+
 Last Edit:
     19.10.2020 0:14
+
 Edit Notes:
 
 */
@@ -43,12 +48,6 @@ Parameters getTwoParameters(Core* core)
     int AST_1 = (secondByte & (7 << 1)) >> 1;
     int AST_2 = (secondByte & (7 << 5)) >> 5;
 
-    //Пока оперативки нет, никаких указателей
-    if (isPtr_1 || isPtr_2)
-    {
-        IRQ_InvalidCommand(core);
-        return parameters;
-    }
 
     /*
         Argument signature type:
@@ -75,17 +74,27 @@ Parameters getTwoParameters(Core* core)
     case AST_RCX:
     case AST_RDX:
         parameters.first = core->rx[AST_1];
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.first += GET_ARGUMENT(core, long long);
         break;
 
 
     case AST_STACKTOP:
-        if (stackTop(core->coreStack, &parameters.first) != STACK_OK 
-            ||
-            stackPop(core->coreStack) != STACK_OK)
+        if (stackTop(core->coreStack, &parameters.first) != STACK_OK)
         {
             IRQ_StackError(core);
             return parameters;
         }
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.first += GET_ARGUMENT(core, long long);
         break;
 
 
@@ -95,7 +104,12 @@ Parameters getTwoParameters(Core* core)
             IRQ_StackError(core);
             return parameters;
         }
-        parameters.first = GET_ARGUMENT(core, long long);
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.first += GET_ARGUMENT(core, long long);
         break;
     default:
         IRQ_InvalidCommand(core);
@@ -109,18 +123,28 @@ Parameters getTwoParameters(Core* core)
     case AST_RBX:
     case AST_RCX:
     case AST_RDX:
-        parameters.first = core->rx[AST_2];
+        parameters.second = core->rx[AST_2];
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.second += GET_ARGUMENT(core, long long);
         break;
 
 
     case AST_STACKTOP:
-        if (stackTop(core->coreStack, &parameters.second) != STACK_OK
-            ||
-            stackPop(core->coreStack) != STACK_OK)
+        if (stackTop(core->coreStack, &parameters.second) != STACK_OK)
         {
             IRQ_StackError(core);
             return parameters;
         }
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.second += GET_ARGUMENT(core, long long);
         break;
 
 
@@ -130,14 +154,18 @@ Parameters getTwoParameters(Core* core)
             IRQ_StackError(core);
             return parameters;
         }
-        parameters.first = GET_ARGUMENT(core, long long);
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.second += GET_ARGUMENT(core, long long);
         break;
     default:
         IRQ_InvalidCommand(core);
         return parameters;
     }
 
-    parameters.isValidParameters = 1;
 
     if (AST_1 == 4 && AST_2 == 4)
     {
@@ -145,6 +173,28 @@ Parameters getTwoParameters(Core* core)
         parameters.first = parameters.second;
         parameters.second = tmp;
     }
+
+    if (isPtr_1)
+    {
+        if (parameters.first >= core->capacity * sizeof(long long))
+        {
+            IRQ_InvalidCommand(core);
+            return parameters;
+        }
+        parameters.first = core->ram[parameters.first];
+    }
+
+    if (isPtr_2)
+    {
+        if (parameters.second >= core->capacity * sizeof(long long))
+        {
+            IRQ_InvalidCommand(core);
+            return parameters;
+        }
+        parameters.second = core->ram[parameters.second];
+    }
+
+    parameters.isValidParameters = 1;
     return parameters;
 }
 
@@ -175,11 +225,7 @@ Parameters getOneParameter(Core* core)
     int AST_1 = (secondByte & (7 << 1)) >> 1;
 
     //Пока оперативки нет, никаких указателей
-    if (isPtr_1)
-    {
-        IRQ_InvalidCommand(core);
-        return parameters;
-    }
+    
 
     /*
         Argument signature type:
@@ -206,17 +252,27 @@ Parameters getOneParameter(Core* core)
     case AST_RCX:
     case AST_RDX:
         parameters.first = core->rx[AST_1];
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.first += GET_ARGUMENT(core, long long);
         break;
 
 
     case AST_STACKTOP:
-        if (stackTop(core->coreStack, &parameters.first) != STACK_OK
-            ||
-            stackPop(core->coreStack) != STACK_OK)
+        if (stackTop(core->coreStack, &parameters.first) != STACK_OK)
         {
             IRQ_StackError(core);
             return parameters;
         }
+        if (isTapeEnd(core, sizeof(long long)))
+        {
+            IRQ_StackError(core);
+            return;
+        }
+        parameters.first += GET_ARGUMENT(core, long long);
         break;
 
 
@@ -233,7 +289,25 @@ Parameters getOneParameter(Core* core)
         return parameters;
     }
 
+    if (isPtr_1)
+    {
+        if (parameters.first >= core->capacity * sizeof(long long))
+        {
+            IRQ_InvalidCommand(core);
+            return parameters;
+        }
+        parameters.first = core->ram[parameters.first];
+    }
     parameters.isValidParameters = 1;
+    return parameters;
+}
+
+Parameters getNoParameters(Core* core)
+{
+    assert(core);
+    proceedInterruption(core);
+    Parameters parameters;
+    parameters.isValidParameters = 1, parameters.first = parameters.second = 0;
     return parameters;
 }
 

@@ -42,6 +42,9 @@
     <ClInclude Include="Files.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="..\Commands includes.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Stack.c">
@@ -59,21 +62,6 @@
     <ClCompile Include="IRQ.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Handlers Arithmetic.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Handlers Logic.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Handlers Control.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Handlers Stack.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Handlers System.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Execution %28auxiliary%29.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -81,6 +69,15 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Files.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Handlers.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Handlers Stack.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Handlers System.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

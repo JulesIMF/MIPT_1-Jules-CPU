@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Core.h
+
 Abstract:
     Реализует класс ядра процессора
+
 Author:
     JulesIMF
+
 Last Edit:
     16.10.2020 10:08
+
 Edit Notes:
 
 */
@@ -26,6 +31,8 @@ Core* newCore(size_t capacity)
     core->inputStream  = newInputStream();
     core->outputStream = newOutputStream();
     core->coreStack = stackNew(capacity);
+    core->ram = (byte*)calloc(capacity, sizeof(long long));
+    core->capacity = capacity;
     return core;
 }
 
@@ -36,6 +43,7 @@ void  deleteCore(Core* core)
     stackDelete(core->coreStack);
     deleteInputStream(core->inputStream);
     deleteOutputStream(core->outputStream);
+    free(core->ram);
     free(core);
 }
 

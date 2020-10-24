@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Execution.h
+
 Abstract:
     Описывает интерфейс обработки программы
+
 Author:
     JulesIMF
+
 Last Edit:
     16.10.2020 11:29
+
 Edit Notes:
 
 */
@@ -63,6 +68,7 @@ void proceedInterruption(Core* core);
 
 Parameters getTwoParameters(Core* core);
 Parameters getOneParameter(Core* core);
+Parameters getNoParameters(Core* core);
 
 
 /**

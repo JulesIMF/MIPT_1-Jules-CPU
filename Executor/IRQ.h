@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     IRQ.h
+
 Abstract:
     Описывает синхронные прерывания
+
 Author:
     JulesIMF
+
 Last Edit:
     16.10.2020 11:29
+
 Edit Notes:
 
 */

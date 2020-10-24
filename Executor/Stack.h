@@ -1,14 +1,19 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Stack.h
+
 Abstract:
     Описывает класс стека для 64-битных
     переменных и его методы
+
 Author:
     JulesIMF
+
 Last Edit:
     09.10.2020 2:16
+
 Edit Notes:
     1) Удалено описание структуры
     2) Метод stackCapacity

@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Core.h
+
 Abstract:
     Описывает класс ядра процессора
+
 Author:
     JulesIMF
+
 Last Edit:
     16.10.2020 10:08
+
 Edit Notes:
     
 */
@@ -64,6 +69,8 @@ struct _Core
 {
     int isWorking;
     int interruption;
+    char* ram;
+    long long capacity;
 
     //Таблица обработчиков асинхронных прерываний
     int intTable[8];

@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Logic
 Abstract:
@@ -162,7 +163,7 @@ void hnd_cli(Core* core)
     core->flags |= FLAG_IF;
 }
 
-void hnd_neg(Core* core)
+void hnd_not(Core* core)
 {
     assert(core);
 

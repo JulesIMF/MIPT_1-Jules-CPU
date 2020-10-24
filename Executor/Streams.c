@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Streams.h
+
 Abstract:
     Реализует потоки ввода/вывода
+
 Author:
     JulesIMF
+
 Last Edit:
     16.10.2020 10:08
+
 Edit Notes:
 
 */

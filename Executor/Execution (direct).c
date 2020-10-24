@@ -1,15 +1,20 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Execution (direct).с
+
 Abstract:
-    Реализует вспомогательный интерфейс исполнения
+    Реализует непосредственный интерфейс исполнения
+
 Author:
     JulesIMF
+
 Last Edit:
     19.10.2020 0:14
-Edit Notes:
 
+Edit Notes:
+    
 */
 
 #include "Execution.h"
@@ -29,11 +34,13 @@ int runProgram(Core* core, byte* translatedFile, int fileSize)
     assert(core);
     assert(translatedFile);
     Program program = getProgram(translatedFile, fileSize);
+
     if (program.tape == NULL)
     {
         printf("Failed to execute: the program is damaged or has too old version\n");
         return 1;
     }
+
     core->program = program;
     core->rip = 0;
     core->interruption = -1;
@@ -42,6 +49,8 @@ int runProgram(Core* core, byte* translatedFile, int fileSize)
     core->flags = FLAG_IF;
     return 0;
 }
+
+
 
 /**
  * .
@@ -60,7 +69,13 @@ int executeNextCommand(Core* core)
 
     switch (GET_ARGUMENT(core, byte))
     {
-    case cmd_add:
+
+        //
+        //Эти строки закомментированы, а не удалены, с целью иметь возможность просто к ним вернуться
+        //
+
+
+    /*case cmd_add:
         hnd_add(core);
         return 1;
 
@@ -178,7 +193,27 @@ int executeNextCommand(Core* core)
 
     case cmd_mov:
         hnd_mov(core);
-        return 1;
+        return 1;*/
+
+//
+//**********************************************************************************************************************************************************************************
+//**********************************************************************************************************************************************************************************
+//**********************************************************************************************************************************************************************************
+//
+
+
+        //
+        //Дорогой потомок, если ты сейчас читаешь это, знай - это сделано в учебных целях,
+        //и без острой нужды НИКОГДА так не делай. Злоупотребление макросами - это преступление,
+        //потому что читать такой код жутко сложно. Простите.
+        //
+
+
+
+
+#define UNWRAP_CMD(NAME, ARGS, CMD_CODE, CMD_BODY, PUSHED_VALUE_TYPE) case CMD_CODE : hnd_##NAME (core); return 1;
+#include "../Commands includes.h"
+#undef UNWRAP_CMD
 
     case cmd_push:
         hnd_push(core);
@@ -222,6 +257,10 @@ int executeNextCommand(Core* core)
 
     case cmd_nop:
         hnd_nop(core);
+        return 1;
+
+    case cmd_mov:
+        hnd_mov(core);
         return 1;
 
     default:

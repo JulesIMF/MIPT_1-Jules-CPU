@@ -1,19 +1,34 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Common.c
+
 Abstract:
     Общие определения
+
 Author:
     JulesIMF
+
 Last Edit:
     17.10.2020 0:26
+
 Edit Notes:
 
 */
 
 #ifndef _JCPU_COMMON
 #define _JCPU_COMMON
+
+#define _JCPU_ASM_VERSION 20201023u
+#define _JCPU_SIGNATURE_SIZE sizeof(jbcSignature)
+
+typedef enum
+{
+    OUTF_LLD = 0,
+    OUTF_LF,
+    OUTF_016LLX,
+} OutFormat;
 
 typedef enum
 {
@@ -39,6 +54,12 @@ typedef enum
     cmd_ret	    = 0x12,
     cmd_int	    = 0x13,
     cmd_iret	= 0x14,
+    cmd_je      = 0x15,
+    cmd_jne     = 0x16,
+    cmd_jl      = 0x17,
+    cmd_jle     = 0x18,
+    cmd_jg      = 0x19,
+    cmd_jge     = 0x1A,
 
     //Logic
     cmd_and     = 0x20,
@@ -73,7 +94,7 @@ typedef enum
 
 typedef struct
 {
-    unsigned signaure;
+    unsigned signature;
     unsigned asmVersion;
     long long checksum;
     long long stackSize;
@@ -82,5 +103,7 @@ typedef struct
 
 
 typedef enum { AST_RAX = 0, AST_RBX, AST_RCX, AST_RDX, AST_STACKTOP, AST_CONST } AST;
+
+
 
 #endif // !_JCPU_COMMON

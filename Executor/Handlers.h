@@ -1,13 +1,18 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Handlers.h
+
 Abstract:
     Описывает хендлеры
+
 Author:
     JulesIMF
+
 Last Edit:
     16.10.2020 10:08
+
 Edit Notes:
 
 */
@@ -39,6 +44,13 @@ void hnd_call(Core* core);
 void hnd_ret(Core* core);
 void hnd_int(Core* core);
 void hnd_iret(Core* core);
+void hnd_je(Core* core);
+void hnd_jne(Core* core);
+void hnd_jl(Core* core);
+void hnd_jle(Core* core);
+void hnd_jg(Core* core);
+void hnd_jge(Core* core);
+void hnd_jm(Core* core);
 
 
 //Logic

@@ -1,14 +1,19 @@
 /*
 Copyright (c) 2020  MIPT
+
 Module Name:
     Stack
+
 Abstract:
     Реализует класс стека для 64-битных переменных, а также имплементацию
     его методов и собственных "системных" функций.
+
 Author:
     JulesIMF
+
 Last Edit:
     15.10.2020 19:35
+
 Edit Notes:
     1) Хеширование структуры
     2) stackCapacity
@@ -54,11 +59,11 @@ if(EXPRESSION)                                                  \
 #define STATIC_VALUES() if(!frontCanary) { if(!strcmp(__FUNCTION__, "stackNew")) _generateValues(); else return STACK_INVALID; }
 
 #define _STACK_DUPLICATE_OFFSET
-#define _STACK_HASH
+//#define _STACK_HASH
 #define _STACK_RETURN_ADDRESS
-#define _STACK_DUPLICATE
-#define _STACK_PRINT_MESSAGES 1
-#define _STACK_DEEP_VALIDATION
+//#define _STACK_DUPLICATE
+#define _STACK_PRINT_MESSAGES 0
+//#define _STACK_DEEP_VALIDATION
 
 
 

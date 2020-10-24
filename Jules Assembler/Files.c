@@ -17,7 +17,7 @@ Edit Notes:
 	1) Подсчет числа слогов в separateStrings
 	2) write выводит строфами
 
-	3) replaceNewLine
+	3) replaceSemicolon
 */
 
 ///Из-за специфики VS необходимо объявить следующий макрос
@@ -109,7 +109,7 @@ int separateStrings(void* source, int fileSize, Line* destination, int nStrings)
 		{
 			text[iText] = '\0';
 			Line newString =
-			{ currentString, nSyllables, currentStringLength };
+			{ currentString, currentStringLength };
 
 			destination[iDestination] = newString;
 			iDestination++;
@@ -144,13 +144,13 @@ int getFileSize(FILE* file)
 }
 
 
-void* translateFileIntoRam(char const* fileName, int* pFileSize)
+void* translateFileIntoRam(char const* fileName, int* pFileSize, int* nStrings)
 {
 	//Файл с данными
-	FILE* file = fopen(fileName, "rb");
+	FILE* file = fopen(fileName, "r");
 	if (!file)
 	{
-		printf("Failed to open program \"%s\"\n", fileName);
+		//printf("Failed to open program \"%s\"\n", fileName);
 		return 0;
 	}
 	else
@@ -174,17 +174,14 @@ void* translateFileIntoRam(char const* fileName, int* pFileSize)
 	((char*)translatedFile)[RETURN_fread] = '\0'; //По новой спецификации функции (чисто поржать)
 	fseek(file, 0, SEEK_SET);
 
-	/*
 	int nNewLines = 0;
 	for (int i = 0; i != RETURN_fread; i++)
 	{
 		if (((char*)translatedFile)[i] == '\n')
 			nNewLines++;
 	}
-	//*nStrings = nNewLines + 1;
-	*/
+	*nStrings = nNewLines + 1;
 	*pFileSize = RETURN_fread;
-	
 
 #ifndef   JULESIMF_NO_OUTPUT
 	printf("Input file closed\n");
@@ -194,12 +191,20 @@ void* translateFileIntoRam(char const* fileName, int* pFileSize)
 	return translatedFile;
 }
 
-void replaceNewLine(char* line)
+void replaceSemicolon(Line* line)
 {
-	for (; *line; line++)
-		if (*line == '\n')
+	char* rawLine = line->string;
+	
+	int size = 0;
+
+	for (; *rawLine; rawLine++)
+	{
+		if (*rawLine == ';')
 		{
-			*line = '\0';
+			*rawLine = '\0';
+			line->size = size;
 			return;
 		}
+		size++;
+	}
 }
