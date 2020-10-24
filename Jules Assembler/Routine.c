@@ -53,13 +53,17 @@ void eraseLeadingSpaces(Line* lines, size_t nLines)
     for (int i = 0; i != nLines; i++)
     {
         char* string = lines[i].string;
+        if (i == 65)
+        {
+            int g = 0;
+        }
         for (int j = lines[i].size - 1; j != -1 && isspace(string[j]); j--)
         {
             string[j] = '\0';
             lines[i].size--;
         }
 
-        for (int j = 0; j != lines[j].size && isspace(string[j]); j++)
+        for (int j = 0; lines[i].size && isspace(string[j]); j++)
         {
             lines[i].string++;
             lines[i].size--;

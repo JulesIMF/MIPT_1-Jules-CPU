@@ -30,9 +30,9 @@ Core* newCore(size_t capacity)
     core->interruption = -1;
     core->inputStream  = newInputStream();
     core->outputStream = newOutputStream();
-    core->coreStack = stackNew(capacity);
-    core->ram = (byte*)calloc(capacity, sizeof(long long));
-    core->capacity = capacity;
+    //core->coreStack = stackNew(capacity);
+    //core->ram = (long long*)calloc(capacity, sizeof(long long));
+    //core->capacity = capacity;
     return core;
 }
 

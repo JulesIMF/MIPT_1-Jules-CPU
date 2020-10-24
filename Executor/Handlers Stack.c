@@ -74,9 +74,9 @@ void hnd_mov(Core* core)
 
         if (isPtr_1)
         {
-            if (value >= core->capacity * sizeof(long long))
+            if (value >= core->capacity)
             {
-                IRQ_InvalidCommand(core);
+                IRQ_HeapOverflow(core);
                 return;
             }
             value = core->ram[value];
@@ -94,9 +94,9 @@ void hnd_mov(Core* core)
         value = GET_ARGUMENT(core, long long);
         if (isPtr_1)
         {
-            if (value >= core->capacity * sizeof(long long))
+            if (value >= core->capacity)
             {
-                IRQ_InvalidCommand(core);
+                IRQ_HeapOverflow(core);
                 return;
             }
             value = core->ram[value];
@@ -123,9 +123,9 @@ void hnd_mov(Core* core)
         addition += GET_ARGUMENT(core, long long);
         if (isPtr_1)
         {
-            if (core->rx[AST_1] + addition >= core->capacity * sizeof(long long))
+            if (core->rx[AST_1] + addition >= core->capacity)
             {
-                IRQ_InvalidCommand(core);
+                IRQ_HeapOverflow(core);
                 return;
             }
             core->ram[core->rx[AST_1] + addition] = value;
@@ -145,9 +145,9 @@ void hnd_mov(Core* core)
                 return;
             }
             addition += GET_ARGUMENT(core, long long);
-            if(addition >= core->capacity * sizeof(long long))
+            if (addition >= core->capacity)
             {
-                IRQ_InvalidParameters(core);
+                IRQ_HeapOverflow(core);
                 return;
             }
             core->ram[addition] = value;
@@ -168,9 +168,9 @@ void hnd_mov(Core* core)
         if (isPtr_1)
         {
             addition = GET_ARGUMENT(core, long long);
-            if (addition >= core->capacity * sizeof(long long))
+            if (addition >= core->capacity)
             {
-                IRQ_InvalidCommand(core);
+                IRQ_HeapOverflow(core);
                 return;
             }
             core->ram[addition] = value;
@@ -352,12 +352,32 @@ void hnd_pushf(Core* core)
     }
 }
 
+void hnd_pushr(Core* core)
+{
+    assert(core);
+    if (stackPush(core->coreStack, core->rip) != STACK_OK)
+    {
+        IRQ_StackError(core);
+        return;
+    }
+}
+
+void hnd_pushs(Core* core)
+{
+    assert(core);
+    if (stackPush(core->coreStack, core->coreStack->size) != STACK_OK)
+    {
+        IRQ_StackError(core);
+        return;
+    }
+}
+
 void hnd_popa(Core* core)
 {
     assert(core);
     for (int i = 0; i != 4; i++)
     {
-        if (stackTop(core->coreStack, &core->rx[i]) != STACK_OK 
+        if (stackTop(core->coreStack, &core->rx[3 - i]) != STACK_OK 
             ||
             stackPop(core->coreStack) != STACK_OK)
         {

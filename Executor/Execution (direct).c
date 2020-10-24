@@ -33,11 +33,13 @@ int runProgram(Core* core, byte* translatedFile, int fileSize)
 {
     assert(core);
     assert(translatedFile);
-    Program program = getProgram(translatedFile, fileSize);
+    Program program = getProgram(translatedFile, fileSize, core);
 
     if (program.tape == NULL)
     {
+        SetColor(LightRed);
         printf("Failed to execute: the program is damaged or has too old version\n");
+        SetColor(White);
         return 1;
     }
 
@@ -64,10 +66,12 @@ int executeNextCommand(Core* core)
         ||
         core->isWorking == 0)
     {
-        return 0;
+        return -1;
     }
 
-    switch (GET_ARGUMENT(core, byte))
+    byte opcode = 0;
+
+    switch (opcode = GET_ARGUMENT(core, byte))
     {
 
         //
@@ -211,60 +215,68 @@ int executeNextCommand(Core* core)
 
 
 
-#define UNWRAP_CMD(NAME, ARGS, CMD_CODE, CMD_BODY, PUSHED_VALUE_TYPE) case CMD_CODE : hnd_##NAME (core); return 1;
+#define UNWRAP_CMD(NAME, ARGS, CMD_CODE, CMD_BODY, PUSHED_VALUE_TYPE) case CMD_CODE : hnd_##NAME (core); return opcode;
 #include "../Commands includes.h"
 #undef UNWRAP_CMD
 
     case cmd_push:
         hnd_push(core);
-        return 1;
+        return opcode;
 
     case cmd_pop:
         hnd_pop(core);
-        return 1;
+        return opcode;
 
     case cmd_pusha:
         hnd_pusha(core);
-        return 1;
+        return opcode;
 
     case cmd_pushf:
         hnd_pushf(core);
-        return 1;
+        return opcode;
+
+    case cmd_pushr:
+        hnd_pushr(core);
+        return opcode;
+
+    case cmd_pushs:
+        hnd_pushs(core);
+        return opcode;
 
     case cmd_popa:
         hnd_popa(core);
-        return 1;
+        return opcode;
 
     case cmd_popf:
         hnd_popf(core);
-        return 1;
+        return opcode;
 
     case cmd_out:
         hnd_out(core);
-        return 1;
+        return opcode;
 
     case cmd_hlt:
         hnd_hlt(core);
-        return 1;
+        return opcode;
 
     case cmd_in:
         hnd_in(core);
-        return 1;
+        return opcode;
 
     case cmd_dump:
         hnd_dump(core);
-        return 1;
+        return opcode;
 
     case cmd_nop:
         hnd_nop(core);
-        return 1;
+        return opcode;
 
     case cmd_mov:
         hnd_mov(core);
-        return 1;
+        return opcode;
 
     default:
         IRQ_InvalidCommand(core);
-        return 0;
+        return -1;
     }
 }

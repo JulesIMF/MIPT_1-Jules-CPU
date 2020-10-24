@@ -19,6 +19,7 @@ Edit Notes:
 
 #include "Execution.h"
 #include "../Common.h"
+#include "../Hash.h"
 
 Parameters getTwoParameters(Core* core)
 {
@@ -77,7 +78,7 @@ Parameters getTwoParameters(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.first += GET_ARGUMENT(core, long long);
         break;
@@ -92,7 +93,7 @@ Parameters getTwoParameters(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.first += GET_ARGUMENT(core, long long);
         break;
@@ -127,7 +128,7 @@ Parameters getTwoParameters(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.second += GET_ARGUMENT(core, long long);
         break;
@@ -142,7 +143,7 @@ Parameters getTwoParameters(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.second += GET_ARGUMENT(core, long long);
         break;
@@ -157,7 +158,7 @@ Parameters getTwoParameters(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.second += GET_ARGUMENT(core, long long);
         break;
@@ -176,9 +177,9 @@ Parameters getTwoParameters(Core* core)
 
     if (isPtr_1)
     {
-        if (parameters.first >= core->capacity * sizeof(long long))
+        if (parameters.first >= core->capacity)
         {
-            IRQ_InvalidCommand(core);
+            IRQ_HeapOverflow(core);
             return parameters;
         }
         parameters.first = core->ram[parameters.first];
@@ -186,9 +187,9 @@ Parameters getTwoParameters(Core* core)
 
     if (isPtr_2)
     {
-        if (parameters.second >= core->capacity * sizeof(long long))
+        if (parameters.second >= core->capacity)
         {
-            IRQ_InvalidCommand(core);
+            IRQ_HeapOverflow(core);
             return parameters;
         }
         parameters.second = core->ram[parameters.second];
@@ -255,7 +256,7 @@ Parameters getOneParameter(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.first += GET_ARGUMENT(core, long long);
         break;
@@ -270,7 +271,7 @@ Parameters getOneParameter(Core* core)
         if (isTapeEnd(core, sizeof(long long)))
         {
             IRQ_StackError(core);
-            return;
+            return parameters;
         }
         parameters.first += GET_ARGUMENT(core, long long);
         break;
@@ -291,9 +292,9 @@ Parameters getOneParameter(Core* core)
 
     if (isPtr_1)
     {
-        if (parameters.first >= core->capacity * sizeof(long long))
+        if (parameters.first >= core->capacity)
         {
-            IRQ_InvalidCommand(core);
+            IRQ_HeapOverflow(core);
             return parameters;
         }
         parameters.first = core->ram[parameters.first];
@@ -317,18 +318,37 @@ int isTapeEnd(Core* core, size_t size)
     return core->rip + size > core->program.size;
 }
 
-int programShift(byte* byteCode, size_t byteCodeSize)
+int programShift(byte* byteCode, size_t byteCodeSize, Core* core)
 {
-    //TODO: сейчас тут цирк, потом будет нормальная проверка сигнатуры
     if (byteCodeSize < sizeof(jbcSignature))
         return -1;
+
+    if (*(int*)byteCode != 'EXEJ')
+        return -1;
+
+    byteCode += sizeof(int);
+
+    if (*(int*)byteCode < _JCPU_MIN_ASM_VERSION)
+        return -1;
+
+    byteCode += sizeof(int);
+
+    long long hash = getHash(byteCode + _JCPU_SIGNATURE_SIZE - 8, byteCodeSize - _JCPU_SIGNATURE_SIZE);
+    if (hash != *(long long*)byteCode)
+        return -1;
+
+    byteCode += sizeof(long long);
+    core->capacity = *(long long*)byteCode;
+    core->coreStack = stackNew(core->capacity);
+    core->ram = (long long*)calloc(core->capacity, sizeof(long long));
+
     return sizeof(jbcSignature);
 }
 
-Program getProgram(byte* byteCode, size_t byteCodeSize)
+Program getProgram(byte* byteCode, size_t byteCodeSize, Core* core)
 {
     assert(byteCode);
-    int shift = programShift(byteCode, byteCodeSize);
+    int shift = programShift(byteCode, byteCodeSize, core);
     Program program;
     if (shift == -1)
         program.tape = NULL, program.size = 0;

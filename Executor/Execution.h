@@ -44,15 +44,8 @@ typedef struct
     long long second;
 } Parameters;
 
-/**
- * .
- * 
- * \param byteCode транслированный в память байт-код
- * \return -1 если программа некорректна, смещение если программа корректна
- */
-int programShift(byte* byteCode);
 
-Program getProgram(byte* byteCode, size_t byteCodeSize);
+Program getProgram(byte* byteCode, size_t byteCodeSize, Core* core);
 
 byte getSecondByte(Core* core);
 

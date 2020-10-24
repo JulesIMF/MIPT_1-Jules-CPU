@@ -27,40 +27,42 @@ static size_t STACK_CAPACITY = 10000;
 
 int main(int argc, char const** argv)
 {
+    SetColor(White);
+
     if (argc == 1)
     {
+        SetColor(LightRed);
         printf("No *.jbc file specified. Stop.\n");
+        SetColor(LightGray);
         //return 0;
-        argv[1] = "../pgmcmn/equation.jbc";
+
+
+
+        
+        //DEBUG
+        SetColor(White);
+        argv[1] = "../pgmcmn/fib.jbc";
     }
     Core* core = newCore(STACK_CAPACITY);
     int fileSize = 0;
     byte* file = (byte*)translateFileIntoRam(argv[1], &fileSize);
     if (file == NULL)
     {
-        printf("Can`t open file \"%s\"\n", argv[1]);
+        SetColor(LightRed);
+        printf("Can`t open file \"%s\". Stop.\n", argv[1]); 
+        SetColor(LightGray);
+        return 0;
     }
     if (runProgram(core, file, fileSize))
         return 0;
 
     //printf("Program runned\n\n\n");
-    while (executeNextCommand(core))
+    while (executeNextCommand(core) != -1)
         ;
 
     //printf("\n\nProgram ended\n");
     deleteCore(core);
     free(file);
+    SetColor(LightGray);
     return 0;
-}
-
-void foo()
-{
-    int x = 0;
-    
-label:
-    x++;
-    if (x != 10)
-        goto label;
-
-
 }

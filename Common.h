@@ -20,7 +20,8 @@ Edit Notes:
 #ifndef _JCPU_COMMON
 #define _JCPU_COMMON
 
-#define _JCPU_ASM_VERSION 20201023u
+#define _JCPU_ASM_VERSION 20201024u
+#define _JCPU_MIN_ASM_VERSION 20201023u
 #define _JCPU_SIGNATURE_SIZE sizeof(jbcSignature)
 
 typedef enum
@@ -72,6 +73,7 @@ typedef enum
     cmd_sti	    = 0x27,
     cmd_cli	    = 0x28,
     cmd_not     = 0x29,
+    cmd_fcmp    = 0x2A,
 
     //Stack
     cmd_mov	    = 0x30,
@@ -81,6 +83,8 @@ typedef enum
     cmd_pushf	= 0x34,
     cmd_popa	= 0x35,
     cmd_popf	= 0x36,
+    cmd_pushr   = 0x37,
+    cmd_pushs   = 0x38,
 
     //System
     cmd_out	    = 0x40,
@@ -103,6 +107,28 @@ typedef struct
 
 
 typedef enum { AST_RAX = 0, AST_RBX, AST_RCX, AST_RDX, AST_STACKTOP, AST_CONST } AST;
+
+enum ConsoleColor
+{
+    Black = 0,
+    Blue = 1,
+    Green = 2,
+    Cyan = 3,
+    Red = 4,
+    Magenta = 5,
+    Brown = 6,
+    LightGray = 7,
+    DarkGray = 8,
+    LightBlue = 9,
+    LightGreen = 10,
+    LightCyan = 11,
+    LightRed = 12,
+    LightMagenta = 13,
+    Yellow = 14,
+    White = 15
+};
+
+void SetColor(int text);
 
 
 

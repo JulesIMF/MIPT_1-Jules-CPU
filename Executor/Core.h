@@ -69,7 +69,7 @@ struct _Core
 {
     int isWorking;
     int interruption;
-    char* ram;
+    long long* ram;
     long long capacity;
 
     //Таблица обработчиков асинхронных прерываний

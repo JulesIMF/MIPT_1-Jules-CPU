@@ -27,6 +27,7 @@ void IRQ_DivideByZero(Core* core);       //1
 void IRQ_InvalidCommand(Core* core);     //2
 void IRQ_InvalidParameters(Core* core);  //3
 void IRQ_InvalidIRQ(Core* core);         //4
+void IRQ_HeapOverflow(Core* core);       //5
 
 
 #endif // !_JCPU_IRQ

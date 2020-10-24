@@ -72,6 +72,8 @@ void hnd_push(Core* core);
 void hnd_pop(Core* core);
 void hnd_pusha(Core* core);
 void hnd_pushf(Core* core);
+void hnd_pushs(Core* core);
+void hnd_pushr(Core* core);
 void hnd_popa(Core* core);
 void hnd_popf(Core* core);
 

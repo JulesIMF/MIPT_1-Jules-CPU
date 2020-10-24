@@ -30,6 +30,6 @@ typedef struct
 } ByteCode;
 
 
-ByteCode getByteCode(Line* lines, size_t nLines);
+ByteCode getByteCode(Line* lines, size_t nLines, char const* asmName);
 
 #endif

@@ -150,7 +150,7 @@ void* translateFileIntoRam(char const* fileName, int* pFileSize)
 	FILE* file = fopen(fileName, "rb");
 	if (!file)
 	{
-		printf("Failed to open program \"%s\"\n", fileName);
+		//printf("Failed to open program \"%s\"\n", fileName);
 		return 0;
 	}
 	else

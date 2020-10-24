@@ -25,22 +25,22 @@ UNWRAP_CMD(add, TwoParameters, GET_CMD(add), { value = parameters.first + parame
 UNWRAP_CMD(sub, TwoParameters, GET_CMD(sub), { value = parameters.first - parameters.second; }, long long)
 UNWRAP_CMD(mul, TwoParameters, GET_CMD(mul), { value = parameters.first * parameters.second; }, long long)
 UNWRAP_CMD(div, TwoParameters, GET_CMD(div), { value = parameters.first / parameters.second; }, long long)
-UNWRAP_CMD(sin, OneParameter, GET_CMD(sin), { value = sin(*(double*)(&parameters.first)); }, double)
-UNWRAP_CMD(cos, OneParameter, GET_CMD(cos), { value = cos(*(double*)(&parameters.first)); }, double)
+UNWRAP_CMD(sin,  OneParameter, GET_CMD(sin), { value = sin(*(double*)(&parameters.first)); }, double)
+UNWRAP_CMD(cos,  OneParameter, GET_CMD(cos), { value = cos(*(double*)(&parameters.first)); }, double)
 UNWRAP_CMD(sqrt, OneParameter, GET_CMD(sqrt), { value = sqrt(*(double*)(&parameters.first)); }, double)
-UNWRAP_CMD(inc, NoParameters, GET_CMD(inc), { if (isTapeEnd(core, 1)) return; int rxIndex = (GET_ARGUMENT(core, byte) & 3); core->rx[rxIndex]++; }, long long)
-UNWRAP_CMD(dec, TwoParameters, GET_CMD(dec), { if (isTapeEnd(core, 1)) return; int rxIndex = (GET_ARGUMENT(core, byte) & 3); core->rx[rxIndex]--; }, long long)
-UNWRAP_CMD(neg, OneParameter, GET_CMD(neg), { value = -parameters.first; }, long long)
+UNWRAP_CMD(inc,  NoParameters, GET_CMD(inc), { if (isTapeEnd(core, 1)) return; int rxIndex = (GET_ARGUMENT(core, byte) & 3); core->rx[rxIndex]++; }, Z_NO_VALUE)
+UNWRAP_CMD(dec,  NoParameters, GET_CMD(dec), { if (isTapeEnd(core, 1)) return; int rxIndex = (GET_ARGUMENT(core, byte) & 3); core->rx[rxIndex]--; }, Z_NO_VALUE)
+UNWRAP_CMD(neg,  OneParameter, GET_CMD(neg), { value = -parameters.first; }, long long)
 UNWRAP_CMD(fadd, TwoParameters, GET_CMD(fadd), { value = (*(double*)(&parameters.first) + *(double*)(&parameters.second)); }, double)
-UNWRAP_CMD(fsub, TwoParameters, GET_CMD(fsub), { value = (*(double*)(&parameters.first) - *(double*)(&parameters.second)); }, long long)
-UNWRAP_CMD(fmul, TwoParameters, GET_CMD(fmul), { value = (*(double*)(&parameters.first) * *(double*)(&parameters.second)); }, long long)
-UNWRAP_CMD(fdiv, TwoParameters, GET_CMD(fdiv), { value = (*(double*)(&parameters.first) / *(double*)(&parameters.second)); }, long long)
+UNWRAP_CMD(fsub, TwoParameters, GET_CMD(fsub), { value = (*(double*)(&parameters.first) - *(double*)(&parameters.second)); }, double)
+UNWRAP_CMD(fmul, TwoParameters, GET_CMD(fmul), { value = (*(double*)(&parameters.first) * *(double*)(&parameters.second)); }, double)
+UNWRAP_CMD(fdiv, TwoParameters, GET_CMD(fdiv), { value = (*(double*)(&parameters.first) / *(double*)(&parameters.second)); }, double)
 
 
 
 
-UNWRAP_CMD(iret, NoParameters, GET_CMD(iret), {}, long long)
-UNWRAP_CMD(int, NoParameters, GET_CMD(int), {}, long long)
+UNWRAP_CMD(iret, NoParameters, GET_CMD(iret), {}, Z_NO_VALUE)
+UNWRAP_CMD(int, NoParameters, GET_CMD(int), {}, Z_NO_VALUE)
 
 
 #ifndef _JCPU_NOJMP
@@ -171,6 +171,13 @@ UNWRAP_CMD(cmp,        TwoParameters, GET_CMD(cmp)    , { value = parameters.fir
 if(!value) core->flags |= ((FLAG_ZF));\
 else core->flags &= (~(FLAG_ZF)); \
 if (value >= 0) core->flags &= (~(FLAG_SF)); \
+else core->flags |= ((FLAG_SF)); \
+    }, Z_NO_VALUE)
+
+UNWRAP_CMD(fcmp,        TwoParameters, GET_CMD(fcmp)    , { double dvalue = *(double*)(&parameters.first) - *(double*)(&parameters.second); \
+if(dvalue == 0.0) core->flags |= ((FLAG_ZF));\
+else core->flags &= (~(FLAG_ZF)); \
+if (dvalue >= 0.0) core->flags &= (~(FLAG_SF)); \
 else core->flags |= ((FLAG_SF)); \
     }, Z_NO_VALUE)
 

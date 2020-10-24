@@ -20,6 +20,7 @@ Edit Notes:
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <Windows.h>
 #include "Streams.h"
 
 #ifndef _MSC_VER
@@ -28,6 +29,11 @@ Edit Notes:
 #define __crt_va_arg va_arg
 #endif // !_MSC_VER
 
+void SetColor(int text)
+{
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hStdOut, (WORD)(text));
+}
 
 int str_printf(OutputStream* stream, char const* format, ...)
 {

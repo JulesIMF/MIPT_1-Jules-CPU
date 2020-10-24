@@ -42,7 +42,8 @@ void hnd_out(Core* core)
         IRQ_InvalidParameters(core);
         return;
     }
-
+    SetColor(LightCyan);
+    str_printf(core->outputStream, "\t");
     switch (secondByte)
     {
     case OUTF_016LLX:
@@ -55,6 +56,7 @@ void hnd_out(Core* core)
         str_printf(core->outputStream, "%lld\n", value);
         return;
     }
+    SetColor(White);
     
 }
 
@@ -70,14 +72,18 @@ void hnd_in(Core* core)
     long long value = -1ll;
     int procN = 0;
     static char buffer[256];
+    SetColor(Yellow);
     str_printf(core->outputStream, "Enter value: ");
+    SetColor(White);
 
     str_scanf(core->inputStream, "%255s", buffer);
 
     if (sscanf(buffer, "%lld%n", &value, &procN) > 0 && (!buffer[procN])) goto PUSH;
     if (sscanf(buffer, "%llx%n", &value, &procN) > 0 && (!buffer[procN])) goto PUSH;
     if (sscanf(buffer, "%lf%n",  &value, &procN) > 0 && (!buffer[procN])) goto PUSH;
+    SetColor(LightRed);
     str_printf(core->outputStream, "Unknown format. -1 will be pushed into stack.\n");
+    SetColor(White);
 
 PUSH:
     if(stackPush(core->coreStack, value) != STACK_OK)

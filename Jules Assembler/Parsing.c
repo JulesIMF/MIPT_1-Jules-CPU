@@ -364,7 +364,7 @@ Instruction getInstruction(Line line, size_t lineN, Label* labels, size_t nLabel
         char reg[4] = "";
         if (!sscanf(line.string + 1 + shift, "%3s", reg))
         {
-            printError("no such interruption handler", lineN);
+            printError("can`t recognize register", lineN);
             instruction.length = 0;
             return instruction;
         }
@@ -390,7 +390,7 @@ Instruction getInstruction(Line line, size_t lineN, Label* labels, size_t nLabel
             return instruction;
         }
         
-        printError("unknown mnemonic", lineN);
+        printError("unknown register", lineN);
 
         instruction.length = 0;
         return instruction;
@@ -450,6 +450,11 @@ Instruction getInstruction(Line line, size_t lineN, Label* labels, size_t nLabel
 
 #include "Instructions include.h"
 
+
+
+    printError("unknown mnemonic", lineN);
+
+    instruction.length = 0;
     return instruction;
 }
 
