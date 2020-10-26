@@ -20,7 +20,7 @@ Edit Notes:
 #ifndef _JCPU_COMMON
 #define _JCPU_COMMON
 
-#define _JCPU_ASM_VERSION 20201024u
+#define _JCPU_ASM_VERSION 20201026u
 #define _JCPU_MIN_ASM_VERSION 20201023u
 #define _JCPU_SIGNATURE_SIZE sizeof(jbcSignature)
 

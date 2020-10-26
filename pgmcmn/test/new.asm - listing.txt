@@ -1,7 +1,7 @@
-Listing file for "equation.asm" assembly
+Listing file for "new.asm" assembly
 
 Program size = 868
-Stack size   = 4000
+Stack size   = 2
 
 
 

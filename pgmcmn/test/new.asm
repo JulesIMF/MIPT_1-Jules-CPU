@@ -1,7 +1,13 @@
 ;Jules Assembler test
 
 ;Эта программа решает квадратное уравнение с параметрами a b c и выводит корни (если они есть)
-@4000
+@2
+
+
+
+
+
+
 
 start:
 
@@ -48,6 +54,9 @@ start:
 	
 
 	hlt
+
+
+
 
 get_discriminant:
 	fmul rbx rbx
@@ -145,4 +154,3 @@ linear:
 	jmp end
 end:
 	hlt
-

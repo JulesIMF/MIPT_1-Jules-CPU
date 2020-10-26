@@ -66,6 +66,7 @@ void hnd_hlt(Core* core)
     core->isWorking = 0;
 }
 
+
 void hnd_in(Core* core)
 {
     assert(core);

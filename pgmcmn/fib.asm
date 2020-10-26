@@ -34,4 +34,5 @@ fib:
 	jl_1:
 	mov 1 rbx
 	ret
+;	sdfsdf
 		

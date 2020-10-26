@@ -136,35 +136,35 @@ GET_ARG1:
     {
         secondByte |= 0 << 1;
         arg1_set = 1;
-        goto GET_ARG2;
+        if(!arg1_ps) goto GET_ARG2;
     }
 
     if (!strcmp("rbx", buffer))
     {
         secondByte |= 1 << 1;
         arg1_set = 1;
-        goto GET_ARG2;
+        if (!arg1_ps) goto GET_ARG2;
     }
 
     if (!strcmp("rcx", buffer))
     {
         secondByte |= 2 << 1;
         arg1_set = 1;
-        goto GET_ARG2;
+        if (!arg1_ps) goto GET_ARG2;
     }
 
     if (!strcmp("rdx", buffer))
     {
         secondByte |= 3 << 1;
         arg1_set = 1;
-        goto GET_ARG2;
+        if (!arg1_ps) goto GET_ARG2;
     }
 
     if (!strcmp("rsp", buffer))
     {
         secondByte |= 4 << 1;
         arg1_set = 1;
-        goto GET_ARG2;
+        if (!arg1_ps) goto GET_ARG2;
     }
 
     //Const
@@ -233,35 +233,35 @@ GET_ARG2:
     {
         secondByte |= 0 << 5;
         arg1_set = 1;
-        goto OUT;
+        if (!arg2_ps) goto OUT;
     }
 
     if (!strcmp("rbx", buffer))
     {
         secondByte |= 1 << 5;
         arg1_set = 1;
-        goto OUT;
+        if (!arg2_ps) goto OUT;
     }
 
     if (!strcmp("rcx", buffer))
     {
         secondByte |= 2 << 5;
         arg1_set = 1;
-        goto OUT;
+        if (!arg2_ps) goto OUT;
     }
 
     if (!strcmp("rdx", buffer))
     {
         secondByte |= 3 << 5;
         arg1_set = 1;
-        goto OUT;
+        if (!arg2_ps) goto OUT;
     }
 
     if (!strcmp("rsp", buffer))
     {
         secondByte |= 4 << 5;
         arg1_set = 1;
-        goto OUT;
+        if (!arg2_ps) goto OUT;
     }
 
     //Const
@@ -354,6 +354,7 @@ Instruction getInstruction(Line line, size_t lineN, Label* labels, size_t nLabel
         return instruction;
     }
 
+    //inc dec
     if (!strcmp("inc", mnemonic) || !strcmp("dec", mnemonic))
     {
         if (!strcmp("inc", mnemonic))
